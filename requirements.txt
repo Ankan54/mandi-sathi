@@ -1,0 +1,6 @@
+crewai
+openai
+streamlit
+requests
+hypothesis
+python-dotenv
