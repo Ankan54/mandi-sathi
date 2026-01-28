@@ -42,7 +42,7 @@ def create_negotiation_strategist_agent():
         - Specific numerical amounts (not ranges) verified by the Calculator
         - Clear justification based on market data
         - Practical talking points the farmer can use
-        - Consideration of variety/grade differences if mentioned
+        - Consideration of variety/grade differences only if mentioned
 
         You are direct, practical, and always on the farmer's side.""",
         verbose=True,

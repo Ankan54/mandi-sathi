@@ -107,11 +107,16 @@ class MandiSaathiCrew:
             expected_output="""Negotiation strategy with:
             - Deal Assessment: [Good/Fair/Bad]
             - Percentage Difference: [X]% below/above market
-            - Counter-Offer: ₹[specific amount] per quintal
+            - Counter-Offer: ₹[specific amount] per quintal . Not Required if Offer Price is not mentioned
             - Walk-Away Price: ₹[specific amount] per quintal
             - Maximum Concession: ₹[amount]
-            - Talking Points: [2-3 specific points]
+            - Talking Points: [2-3 specific points]. Not Required if Offer Price is not mentioned.
             - Justification: [One clear reason based on market data]
+
+            Point TO NOTE: 
+            -You will never assume Trader's offer if the offered price is not mentioned by user.
+            - You will never repeat the same negotiation tactics from conversation history if the User comes back with negative response from the Trader.
+            - If user only asks about the price then answer with only the price details and what are the prices in nearby mandis (if data available). No other information needed in that case.
             """,
             agent=self.negotiation_strategist_agent,
             context=[price_discovery_task]
@@ -144,10 +149,10 @@ class MandiSaathiCrew:
             expected_output="""A concise, farmer-friendly response (max 5 sentences) that:
             - Matches the farmer's language and tone exactly
             - States current market price
-            - Assesses their deal (good/bad/fair)
-            - Gives specific counter-offer with reason
-            - States minimum acceptable price
-            - do not repeat the same messages again from conversation history
+            - Assesses their deal (good/bad/fair). Not Required if offered price is not mentioned
+            - Gives specific counter-offer with reason. Not Required if offered price is not mentioned
+            - States minimum acceptable price. Not Required if offered price is not mentioned
+            - do not repeat the same negotiation tactics again from conversation history in case of negative response from the Trader.
             
             Example format (adapt to farmer's language):
             "[Greeting], abhi [location] mein [commodity] ka bhav ₹[market_price] chal raha hai. 
