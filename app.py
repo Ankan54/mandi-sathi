@@ -11,7 +11,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for Harvest Clarity design philosophy
+# Custom CSS for chat interface matching the screenshot design
 st.markdown("""
 <style>
     /* Import Google Fonts */
@@ -22,9 +22,9 @@ st.markdown("""
         font-family: 'Inter', sans-serif;
     }
     
-    /* Main background - soft cream white */
+    /* Main background - soft cream/beige */
     .stApp {
-        background-color: #F8F6F3;
+        background-color: #F5F3F0;
     }
     
     /* Sidebar - Deep forest green */
@@ -38,20 +38,11 @@ st.markdown("""
     }
     
     /* Sidebar header */
-    [data-testid="stSidebar"] h1 {
-        color: #F8F6F3 !important;
-        font-weight: 600;
-        font-size: 1.5rem;
-        letter-spacing: 0.02em;
-        margin-bottom: 0.5rem;
-    }
-    
-    /* Sidebar caption */
-    [data-testid="stSidebar"] .element-container p {
-        color: #B7E4C7 !important;
-        font-size: 0.75rem;
-        font-weight: 300;
-        letter-spacing: 0.05em;
+    [data-testid="stSidebar"] .sidebar-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
     }
     
     /* New Chat button */
@@ -65,6 +56,7 @@ st.markdown("""
         letter-spacing: 0.03em;
         box-shadow: 0 4px 12px rgba(64, 145, 108, 0.3);
         transition: all 0.3s ease;
+        width: 100%;
     }
     
     [data-testid="stSidebar"] button[kind="primary"]:hover {
@@ -75,9 +67,9 @@ st.markdown("""
     
     /* Session history buttons */
     [data-testid="stSidebar"] button[kind="secondary"] {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.08);
         color: #F8F6F3 !important;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.15);
         border-radius: 10px;
         padding: 0.75rem;
         margin: 0.5rem 0;
@@ -94,26 +86,209 @@ st.markdown("""
     
     /* Main content area */
     .main .block-container {
-        padding: 2rem 3rem;
-        max-width: 1200px;
+        padding: 0;
+        max-width: 100%;
     }
     
-    /* Title styling */
-    h1 {
+    /* Chat header */
+    .chat-header {
+        background: white;
+        padding: 1.25rem 2rem;
+        border-bottom: 1px solid #E8E6E3;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+    
+    .chat-header h2 {
         color: #1B4332;
-        font-weight: 700;
-        font-size: 2.5rem;
-        letter-spacing: -0.02em;
-        margin-bottom: 0.5rem;
-    }
-    
-    h2, h3 {
-        color: #2D6A4F;
+        font-size: 1.125rem;
         font-weight: 600;
-        letter-spacing: 0.01em;
+        margin: 0;
     }
     
-    /* Info box - warm amber tones */
+    .chat-header .subtitle {
+        color: #6B7280;
+        font-size: 0.75rem;
+        font-weight: 400;
+        margin-top: 0.25rem;
+    }
+    
+    .connected-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #10B981;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+    
+    .connected-dot {
+        width: 8px;
+        height: 8px;
+        background: #10B981;
+        border-radius: 50%;
+    }
+    
+    /* Chat messages container */
+    .chat-messages {
+        padding: 2rem;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    
+    /* Hide default Streamlit chat styling */
+    [data-testid="stChatMessage"] {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 1.5rem 0 !important;
+        display: flex !important;
+        width: 100% !important;
+    }
+    
+    /* Assistant message - left aligned with avatar on left */
+    .stChatMessage:has(> div > [data-testid="stChatMessageAvatarAssistant"]) {
+        justify-content: flex-start !important;
+    }
+    
+    .stChatMessage:has(> div > [data-testid="stChatMessageAvatarAssistant"]) > div {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 1rem !important;
+        max-width: 70% !important;
+        align-items: flex-start !important;
+    }
+    
+    /* User message - right aligned with avatar on right */
+    .stChatMessage:has(> div > [data-testid="stChatMessageAvatarUser"]) {
+        justify-content: flex-end !important;
+    }
+    
+    .stChatMessage:has(> div > [data-testid="stChatMessageAvatarUser"]) > div {
+        display: flex !important;
+        flex-direction: row-reverse !important;
+        gap: 1rem !important;
+        max-width: 70% !important;
+        align-items: flex-start !important;
+    }
+    
+    /* Fallback using nth-child - assistant (odd) left, user (even) right */
+    [data-testid="stChatMessage"]:nth-child(odd) {
+        justify-content: flex-start !important;
+    }
+    
+    [data-testid="stChatMessage"]:nth-child(even) {
+        justify-content: flex-end !important;
+    }
+    
+    [data-testid="stChatMessage"]:nth-child(even) > div {
+        flex-direction: row-reverse !important;
+    }
+    
+    /* Avatar styling */
+    [data-testid="stChatMessageAvatarAssistant"],
+    [data-testid="stChatMessageAvatarUser"] {
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+        flex-shrink: 0 !important;
+    }
+    
+    [data-testid="stChatMessageAvatarAssistant"] {
+        background: #2D6A4F !important;
+        color: white !important;
+    }
+    
+    [data-testid="stChatMessageAvatarUser"] {
+        background: #DC6B4A !important;
+        color: white !important;
+    }
+    
+    /* Message content styling */
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] {
+        background: white;
+        border: 1.5px solid #E5E7EB;
+        border-radius: 16px;
+        padding: 1.25rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+    
+    [data-testid="stChatMessage"][data-testid*="user"] [data-testid="stMarkdownContainer"] {
+        background: #E8F5E9;
+        border-color: #C8E6C9;
+    }
+    
+    /* Message text */
+    [data-testid="stChatMessage"] p {
+        color: #1F2937;
+        font-size: 0.9375rem;
+        line-height: 1.6;
+        margin: 0;
+    }
+    
+    [data-testid="stChatMessage"] strong {
+        color: #1B4332;
+        font-weight: 600;
+    }
+    
+    /* Highlighted text in messages */
+    [data-testid="stChatMessage"] .highlight {
+        color: #DC2626;
+        font-weight: 600;
+    }
+    
+    /* Chat input container */
+    [data-testid="stChatInputContainer"] {
+        border-top: 1px solid #E8E6E3;
+        background: white;
+        padding: 1.5rem 2rem;
+    }
+    
+    /* Chat input */
+    [data-testid="stChatInput"] {
+        border-radius: 24px !important;
+        border: 1.5px solid #E5E7EB !important;
+        background: #F9FAFB !important;
+        padding: 0.875rem 1.25rem !important;
+        box-shadow: none !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    [data-testid="stChatInput"]:focus-within {
+        border-color: #52B788 !important;
+        box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.1) !important;
+    }
+    
+    /* Send button */
+    [data-testid="stChatInput"] button {
+        background: #2D6A4F !important;
+        color: white !important;
+        border-radius: 50% !important;
+        width: 40px !important;
+        height: 40px !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: 0 2px 8px rgba(45, 106, 79, 0.3) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    [data-testid="stChatInput"] button:hover {
+        background: #1B4332 !important;
+        box-shadow: 0 4px 12px rgba(45, 106, 79, 0.4) !important;
+        transform: scale(1.05) !important;
+    }
+    
+    /* Info box */
     .stAlert {
         background: linear-gradient(135deg, #FFF8E7 0%, #FFE8CC 100%);
         border-left: 4px solid #D4A574;
@@ -123,60 +298,9 @@ st.markdown("""
         box-shadow: 0 2px 8px rgba(212, 165, 116, 0.15);
     }
     
-    /* Chat messages */
-    [data-testid="stChatMessage"] {
-        background: white;
-        border-radius: 16px;
-        padding: 1.25rem;
-        margin: 1rem 0;
-        box-shadow: 0 2px 12px rgba(27, 67, 50, 0.08);
-        border: 1px solid rgba(27, 67, 50, 0.05);
-    }
-    
-    /* User message - soft green tint */
-    [data-testid="stChatMessage"][data-testid*="user"] {
-        background: linear-gradient(135deg, #E8F5E9 0%, #D7F0DD 100%);
-        border-left: 3px solid #52B788;
-    }
-    
-    /* Assistant message - warm cream */
-    [data-testid="stChatMessage"][data-testid*="assistant"] {
-        background: white;
-        border-left: 3px solid #D4A574;
-    }
-    
-    /* Chat input */
-    [data-testid="stChatInput"] {
-        border-radius: 16px;
-        border: 2px solid #D7F0DD;
-        background: white;
-        padding: 0.75rem;
-        box-shadow: 0 4px 16px rgba(27, 67, 50, 0.1);
-        transition: all 0.3s ease;
-    }
-    
-    [data-testid="stChatInput"]:focus-within {
-        border-color: #52B788;
-        box-shadow: 0 4px 20px rgba(82, 183, 136, 0.2);
-    }
-    
     /* Spinner */
     .stSpinner > div {
         border-top-color: #52B788 !important;
-    }
-    
-    /* Divider */
-    hr {
-        border-color: rgba(27, 67, 50, 0.1);
-        margin: 2rem 0;
-    }
-    
-    /* Caption text */
-    .caption {
-        color: #74A98A;
-        font-size: 0.875rem;
-        font-weight: 300;
-        letter-spacing: 0.03em;
     }
     
     /* Scrollbar */
@@ -186,7 +310,7 @@ st.markdown("""
     }
     
     ::-webkit-scrollbar-track {
-        background: #F8F6F3;
+        background: #F5F3F0;
     }
     
     ::-webkit-scrollbar-thumb {
@@ -198,81 +322,11 @@ st.markdown("""
         background: #74C69D;
     }
     
-    /* Card-like containers */
-    .element-container {
-        transition: all 0.3s ease;
-    }
-    
-    /* Rounded corners everywhere */
-    button, input, textarea, select {
-        border-radius: 10px !important;
-    }
-    
-    /* Success message */
-    .stSuccess {
-        background: linear-gradient(135deg, #D7F0DD 0%, #B7E4C7 100%);
-        border-left: 4px solid #52B788;
-        border-radius: 12px;
-        color: #1B4332;
-    }
-    
-    /* Error message */
-    .stError {
-        background: linear-gradient(135deg, #FFE8E8 0%, #FFD4D4 100%);
-        border-left: 4px solid #D4A574;
-        border-radius: 12px;
-        color: #5C4A3A;
-    }
-    
-    /* Header area */
-    header[data-testid="stHeader"] {
-        background: transparent;
-    }
-    
     /* Hide Streamlit branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    
-    /* Smooth transitions */
-    * {
-        transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-    }
-    
-    /* Chat message avatars */
-    [data-testid="stChatMessageAvatarUser"] {
-        background: linear-gradient(135deg, #52B788 0%, #40916C 100%);
-    }
-    
-    [data-testid="stChatMessageAvatarAssistant"] {
-        background: linear-gradient(135deg, #D4A574 0%, #B8956A 100%);
-    }
-    
-    /* Input placeholder */
-    input::placeholder, textarea::placeholder {
-        color: #95D5B2 !important;
-        font-weight: 300;
-    }
-    
-    /* Button hover effects */
-    button:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    
-    /* Markdown in chat */
-    [data-testid="stChatMessage"] p {
-        line-height: 1.6;
-        color: #2D6A4F;
-    }
-    
-    [data-testid="stChatMessage"] strong {
-        color: #1B4332;
-        font-weight: 600;
-    }
-    
-    /* Info box icons */
-    .stAlert [data-testid="stMarkdownContainer"] {
-        line-height: 1.7;
+    header[data-testid="stHeader"] {
+        background: transparent;
     }
     
     /* Sidebar divider */
@@ -281,14 +335,10 @@ st.markdown("""
         margin: 1rem 0;
     }
     
-    /* Loading animation */
-    @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
-    }
-    
-    .stSpinner {
-        animation: pulse 1.5s ease-in-out infinite;
+    /* Input placeholder */
+    input::placeholder, textarea::placeholder {
+        color: #9CA3AF !important;
+        font-weight: 400;
     }
 
 </style>
@@ -323,8 +373,10 @@ with st.sidebar:
     # Logo and title
     st.markdown("### 🌾 Mandi Saathi")
     st.caption("YOUR NEGOTIATION COMPANION")
-    
-    st.markdown("<br>", unsafe_allow_html=True)
+    # st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("---")
+    st.caption("🌾 Powered by AI • Built for Farmers")
+    st.markdown("Made with ❤️ by [Ankan](https://github.com/Ankan54)", unsafe_allow_html=True)
     
     # New chat button
     if st.button("➕ New Chat", use_container_width=True, type="primary"):
@@ -368,17 +420,25 @@ with st.sidebar:
             st.markdown("<br>", unsafe_allow_html=True)
     else:
         st.info("💭 No previous conversations yet")
-    
-    st.markdown("---")
-    st.caption("🌾 Powered by AI • Built for Farmers")
 
-# Main chat interface
-st.title("🌾 Mandi Saathi")
-st.markdown("##### Get Fair Prices for Your Produce")
-st.markdown("<br>", unsafe_allow_html=True)
+# # Main chat interface
+# # Chat header
+# st.markdown(f"""
+# <div class="chat-header">
+#     <div>
+#         <h2>🌾 Mandi Saathi</h2>
+#         <div class="subtitle">Your Negotiation Companion</div>
+#     </div>
+#     <div class="connected-badge">
+#         <div class="connected-dot"></div>
+#         Connected
+#     </div>
+# </div>
+# """, unsafe_allow_html=True)
 
 # Display welcome message
 if not st.session_state.messages:
+    st.markdown("<br><br>", unsafe_allow_html=True)
     st.info("""
     **👋 Namaste! Welcome to Mandi Saathi**
     
@@ -395,19 +455,19 @@ if not st.session_state.messages:
 
 # Display chat messages
 for message in st.session_state.messages:
-    with st.chat_message("user"):
+    with st.chat_message("user", avatar="🧑‍🌾"):
         st.markdown(message["user"])
-    with st.chat_message("assistant"):
+    with st.chat_message("assistant", avatar="👨‍💼"):
         st.markdown(message["assistant"])
 
 # Chat input
-if prompt := st.chat_input("Type your message in any language... (Hindi, English, Hinglish)"):
+if prompt := st.chat_input("Type your message in any language..."):
     # Create new session if needed
     if not st.session_state.session_id:
         st.session_state.session_id = session_manager.generate_session_id()
     
     # Display user message
-    with st.chat_message("user"):
+    with st.chat_message("user", avatar="🧑‍🌾"):
         st.markdown(prompt)
     
     # Capture full chat history before appending current message
@@ -417,7 +477,7 @@ if prompt := st.chat_input("Type your message in any language... (Hindi, English
     st.session_state.messages.append({"user": prompt, "assistant": ""})
 
     # Get response from crew
-    with st.chat_message("assistant"):
+    with st.chat_message("assistant", avatar="👨‍💼"):
         with st.spinner("🌾 Analyzing market prices and preparing your advice..."):
             try:
                 response = crew.run(prompt, chat_history)
@@ -437,9 +497,3 @@ if prompt := st.chat_input("Type your message in any language... (Hindi, English
                 error_msg = f"😔 Sorry, I encountered an error: {str(e)}. Please try again."
                 st.error(error_msg)
                 st.session_state.messages[-1]["assistant"] = error_msg
-
-# Footer
-st.markdown("<br><br>", unsafe_allow_html=True)
-st.markdown("---")
-st.caption("🌾 Mandi Saathi • Empowering farmers with AI-driven market intelligence")
-st.caption("💡 Powered by AI • Built with care for Indian farmers")
