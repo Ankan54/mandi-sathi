@@ -1,0 +1,224 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Mandi Saathi Architecture" id="architecture">
+    <mxGraphModel dx="1434" dy="844" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="Mandi Saathi - AI-Powered Farmer Negotiation Assistant" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="280" y="20" width="600" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- User Interface Layer -->
+        <mxCell id="ui-layer" value="User Interface Layer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=14;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="100" y="80" width="960" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="streamlit" value="Streamlit Web App&lt;br&gt;(app.py)&lt;br&gt;&lt;br&gt;• Chat Interface&lt;br&gt;• Session Management&lt;br&gt;• Chat History Sidebar&lt;br&gt;• Welcome Messages" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="130" y="110" width="900" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow from UI to Supervisor -->
+        <mxCell id="ui-to-supervisor" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=classic;endFill=1;" edge="1" parent="1" source="streamlit" target="supervisor-layer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Supervisor Layer -->
+        <mxCell id="supervisor-layer" value="Intent Routing Layer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=14;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="100" y="240" width="960" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="supervisor" value="Supervisor Agent&lt;br&gt;(supervisor_agent.py)&lt;br&gt;&lt;br&gt;Intent Classification:&lt;br&gt;• GREETING - Direct response&lt;br&gt;• PRICE_ONLY - Fetch prices only&lt;br&gt;• NEGOTIATION_WITH_CONTEXT - Use cached prices&lt;br&gt;• FULL_WORKFLOW - Complete analysis&lt;br&gt;• MISSING_INFO - Request details&lt;br&gt;• GENERAL_QUERY - Service info&lt;br&gt;&lt;br&gt;Extracts: location, commodity, offered_price" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E6;strokeColor=#D79B00;fontSize=10;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="130" y="270" width="900" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow from Supervisor to Orchestration -->
+        <mxCell id="supervisor-to-crew" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=classic;endFill=1;" edge="1" parent="1" source="supervisor" target="orchestration-layer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Orchestration Layer -->
+        <mxCell id="orchestration-layer" value="Agent Orchestration Layer (CrewAI)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=14;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="100" y="420" width="960" height="280" as="geometry" />
+        </mxCell>
+
+        <mxCell id="crew-manager" value="Crew Manager (crew_manager.py)&lt;br&gt;Workflow Orchestration" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="450" width="320" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Agent 1: Price Discovery -->
+        <mxCell id="agent1" value="Agent 1: Price Discovery&lt;br&gt;(price_discovery_agent.py)&lt;br&gt;&lt;br&gt;Tools:&lt;br&gt;• get_districts_for_state&lt;br&gt;• validate_location&lt;br&gt;• fetch_mandi_prices&lt;br&gt;• normalize_commodity&lt;br&gt;&lt;br&gt;Tasks:&lt;br&gt;• Location validation &amp; normalization&lt;br&gt;• Commodity name mapping&lt;br&gt;• Fetch market prices&lt;br&gt;• Get neighboring district prices&lt;br&gt;&lt;br&gt;Model: GPT-5.2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=10;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="130" y="510" width="250" height="170" as="geometry" />
+        </mxCell>
+
+        <!-- Agent 2: Negotiation Strategist -->
+        <mxCell id="agent2" value="Agent 2: Negotiation Strategist&lt;br&gt;(negotiation_strategist_agent.py)&lt;br&gt;&lt;br&gt;Tools:&lt;br&gt;• calculator (safe math eval)&lt;br&gt;&lt;br&gt;Tasks:&lt;br&gt;• Analyze offered vs market price&lt;br&gt;• Calculate % difference&lt;br&gt;• Classify deal (Good/Fair/Bad)&lt;br&gt;• Generate counter-offer (90-95%)&lt;br&gt;• Calculate walk-away price (80%)&lt;br&gt;• Create negotiation talking points&lt;br&gt;&lt;br&gt;Model: GPT-5.2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=10;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="410" y="510" width="250" height="170" as="geometry" />
+        </mxCell>
+
+        <!-- Agent 3: Communicator -->
+        <mxCell id="agent3" value="Agent 3: Communicator&lt;br&gt;(communicator_agent.py)&lt;br&gt;&lt;br&gt;Tasks:&lt;br&gt;• Detect language (Hindi/English/Hinglish)&lt;br&gt;• Match farmer's tone (formal/casual)&lt;br&gt;• Format response in farmer's language&lt;br&gt;• Keep concise (max 5 sentences)&lt;br&gt;• Include specific numbers&lt;br&gt;• Provide actionable advice&lt;br&gt;&lt;br&gt;Model: GPT-5-mini (faster)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=10;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="690" y="510" width="250" height="170" as="geometry" />
+        </mxCell>
+
+        <!-- Sequential Flow -->
+        <mxCell id="flow1-2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=classic;endFill=1;dashed=1;" edge="1" parent="1" source="agent1" target="agent2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow2-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=classic;endFill=1;dashed=1;" edge="1" parent="1" source="agent2" target="agent3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Crew to Agents -->
+        <mxCell id="crew-to-agent1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;endArrow=classic;endFill=1;" edge="1" parent="1" source="crew-manager" target="agent1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="crew-to-agent2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;endArrow=classic;endFill=1;" edge="1" parent="1" source="crew-manager" target="agent2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="crew-to-agent3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;endArrow=classic;endFill=1;" edge="1" parent="1" source="crew-manager" target="agent3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Tools Layer -->
+        <mxCell id="tools-layer" value="Tools &amp; Services Layer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=14;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="100" y="740" width="640" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="location-tools" value="Location Tools&lt;br&gt;(location_tools.py)&lt;br&gt;&lt;br&gt;• Fuzzy matching&lt;br&gt;• State aliases&lt;br&gt;• District validation&lt;br&gt;• 21 states support" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B9E0A5;strokeColor=#82B366;fontSize=10;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="130" y="770" width="160" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="price-tools" value="Price Tools&lt;br&gt;(price_tools.py)&lt;br&gt;&lt;br&gt;• Fetch mandi prices&lt;br&gt;• Normalize commodity&lt;br&gt;• Hindi/English mapping&lt;br&gt;• Fuzzy matching" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B9E0A5;strokeColor=#82B366;fontSize=10;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="310" y="770" width="160" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="calculator-tools" value="Calculator Tools&lt;br&gt;(calculator_tools.py)&lt;br&gt;&lt;br&gt;• Safe math eval&lt;br&gt;• AST-based&lt;br&gt;• No code execution&lt;br&gt;• Price calculations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B9E0A5;strokeColor=#82B366;fontSize=10;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="490" y="770" width="160" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- Agents to Tools arrows -->
+        <mxCell id="agent1-to-tools" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="agent1" target="location-tools">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="agent1-to-price-tools" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="agent1" target="price-tools">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="agent2-to-calc" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="agent2" target="calculator-tools">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Database Layer -->
+        <mxCell id="database-layer" value="Data Persistence Layer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E6;strokeColor=#D79B00;fontSize=14;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="780" y="740" width="280" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="database" value="SQLite Database&lt;br&gt;(mandi_saathi.db)&lt;br&gt;&lt;br&gt;Tables:&lt;br&gt;• market_prices (cache)&lt;br&gt;• districts (validation)&lt;br&gt;• chat_sessions (metadata)&lt;br&gt;• chat_messages (history)&lt;br&gt;&lt;br&gt;Managers:&lt;br&gt;• DatabaseManager&lt;br&gt;• SessionManager&lt;br&gt;• CacheManager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=10;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="810" y="770" width="220" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- UI to Database -->
+        <mxCell id="ui-to-db" value="Session Storage" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;endArrow=classic;endFill=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;dashed=1;startArrow=classic;startFill=1;" edge="1" parent="1" source="streamlit" target="database">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1080" y="145" />
+              <mxPoint x="1080" y="700" />
+              <mxPoint x="920" y="700" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- External Services Layer -->
+        <mxCell id="external-layer" value="External Services" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=14;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="100" y="940" width="960" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="datagovin" value="data.gov.in API&lt;br&gt;(api_client.py)&lt;br&gt;&lt;br&gt;• Real-time market prices&lt;br&gt;• District information&lt;br&gt;• Retry logic (3 attempts)&lt;br&gt;• 15s timeout&lt;br&gt;• Exponential backoff" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B9E0A5;strokeColor=#82B366;fontSize=10;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="130" y="970" width="380" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="openai" value="OpenAI API&lt;br&gt;&lt;br&gt;Models:&lt;br&gt;• GPT-5.2 (Supervisor, Agents 1&amp;2)&lt;br&gt;• GPT-5-mini (Agent 3)&lt;br&gt;&lt;br&gt;Temperature: 0.3-0.7" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B9E0A5;strokeColor=#82B366;fontSize=10;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="540" y="970" width="380" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Tools to External Services -->
+        <mxCell id="price-to-api" value="Price Fetch" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;endArrow=classic;endFill=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="price-tools" target="datagovin">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="location-to-api" value="District Info" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;endArrow=classic;endFill=1;entryX=0.3;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="location-tools" target="datagovin">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="agents-to-openai" value="LLM Calls" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="orchestration-layer" target="openai">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="580" y="920" />
+              <mxPoint x="730" y="920" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Cache Flow -->
+        <mxCell id="cache-flow" value="Cache Layer&lt;br&gt;(24hr validity)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;endArrow=classic;endFill=1;startArrow=classic;startFill=1;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="price-tools" target="database">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend" value="Legend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=12;fontStyle=1;verticalAlign=top;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1120" width="300" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend-solid" value="Sequential Flow" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="160" y="1150" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-solid-arrow" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=classic;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="120" y="1160" as="sourcePoint" />
+            <mxPoint x="150" y="1160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="legend-dashed" value="Conditional/Cache" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="160" y="1180" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-dashed-arrow" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=classic;endFill=1;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="120" y="1190" as="sourcePoint" />
+            <mxPoint x="150" y="1190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="legend-bidirectional" value="Bidirectional" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="160" y="1210" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-bi-arrow" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=classic;endFill=1;startArrow=classic;startFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="120" y="1220" as="sourcePoint" />
+            <mxPoint x="150" y="1220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Key Features -->
+        <mxCell id="features" value="Key Features" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=12;fontStyle=1;verticalAlign=top;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="440" y="1120" width="620" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="feature-text" value="✓ Multilingual Support (Hindi, English, Hinglish)&lt;br&gt;✓ Intelligent Intent Routing (6 intent types)&lt;br&gt;✓ Real-time Market Price Data (data.gov.in)&lt;br&gt;✓ Smart Caching (24hr validity, reduces API calls)&lt;br&gt;✓ Location Intelligence (Fuzzy matching, 21 states)&lt;br&gt;✓ Deal Analysis (Good/Fair/Bad classification)&lt;br&gt;✓ Counter-offer Generation (90-95% of modal price)&lt;br&gt;✓ Chat History Management (Session persistence)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="450" y="1145" width="600" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Workflow Examples -->
+        <mxCell id="workflow-box" value="Workflow Types" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=12;fontStyle=1;verticalAlign=top;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1280" width="960" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="workflow-text" value="1. GREETING: Direct response from Supervisor (no agents)&lt;br&gt;2. PRICE_ONLY: Agent 1 (Price Discovery) → Agent 3 (Communicator)&lt;br&gt;3. NEGOTIATION_WITH_CONTEXT: Agent 2 (Negotiation) → Agent 3 (uses cached prices from history)&lt;br&gt;4. FULL_WORKFLOW: Agent 1 (Price Discovery) → Agent 2 (Negotiation) → Agent 3 (Communicator)&lt;br&gt;5. MISSING_INFO: Request user to provide location/commodity details&lt;br&gt;6. GENERAL_QUERY: Answer questions about service capabilities" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="110" y="1305" width="940" height="70" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

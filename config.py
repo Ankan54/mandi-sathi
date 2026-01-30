@@ -19,7 +19,9 @@ DATABASE_PATH = os.getenv("DATABASE_PATH", "mandi_saathi.db")
 CACHE_VALIDITY_HOURS = int(os.getenv("CACHE_VALIDITY_HOURS", "24"))
 
 # Agent Configuration
-AGENT_MODEL = "gpt-5.2"
+SUPERVISOR_MODEL = "gpt-5.2"  # Critical for routing decisions
+AGENT_MODEL = "gpt-5.2"  # For price discovery and negotiation agents
+COMMUNICATOR_MODEL = "gpt-5-mini"  # Faster model for communication
 AGENT_TEMPERATURE = 0.7
 
 # Validation

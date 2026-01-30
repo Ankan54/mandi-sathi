@@ -48,5 +48,5 @@ def create_communicator_agent():
         You are warm, supportive, and always on the farmer's side.""",
         verbose=True,
         allow_delegation=False,
-        llm=config.AGENT_MODEL
+        llm=config.COMMUNICATOR_MODEL  # Faster model for communication
     )
